@@ -1,20 +1,30 @@
 {
-    "name": "minimal-express-app",
+    "name": "enterprise-commerce-api",
     "version": "1.0.0",
-    "description": "Minimal Express app with scalable structure",
+    "description": "Enterprise Commerce Platform - Express.js REST API Backend",
     "main": "src/server.js",
     "scripts": {
         "start": "node src/server.js",
         "dev": "nodemon src/server.js",
         "test": "jest",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "generate:openapi": "node generate_openapi.js"
     },
     "dependencies": {
+        "bcryptjs": "^2.4.3",
         "cors": "2.8.5",
         "dotenv": "^16.3.1",
-        "express": "^4.18.2",
+        "express": "^4.21.2",
+        "express-rate-limit": "^7.4.1",
+        "helmet": "^8.0.0",
+        "joi": "^17.13.3",
+        "jsonwebtoken": "^9.0.2",
+        "morgan": "^1.10.0",
+        "pg": "^8.13.1",
         "swagger-jsdoc": "^6.2.8",
-        "swagger-ui-express": "^5.0.1"
+        "swagger-ui-express": "^5.0.1",
+        "uuid": "^10.0.0",
+        "winston": "^3.17.0"
     },
     "devDependencies": {
         "eslint": "^9.24.0",

@@ -1,4 +1,15 @@
-// This file will export middleware as the application grows
+/**
+ * Middleware barrel export.
+ * Aggregates all custom middleware for convenient importing.
+ */
+const authenticate = require('./auth');
+const authorize = require('./authorize');
+const validate = require('./validate');
+const errorHandler = require('./errorHandler');
+
 module.exports = {
-  // Add your middleware here
+  authenticate,
+  authorize,
+  validate,
+  errorHandler,
 };
