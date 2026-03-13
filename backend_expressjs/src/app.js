@@ -11,6 +11,10 @@
  * 6. Routes
  * 7. 404 handler
  * 8. Centralized error handler
+ *
+ * CORS:
+ *   Allowed origins are built from ALLOWED_ORIGINS env var + FRONTEND_URL.
+ *   The config module merges and de-duplicates them automatically.
  */
 const cors = require('cors');
 const express = require('express');
@@ -34,13 +38,22 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
 }));
 
-app.use(cors({
+// Build CORS options — use explicit origin list or wildcard fallback
+const corsOptions = {
   origin: config.allowedOrigins.length > 0 ? config.allowedOrigins : '*',
   methods: config.allowedMethods,
   allowedHeaders: config.allowedHeaders,
   credentials: true,
   maxAge: config.corsMaxAge,
-}));
+};
+
+app.use(cors(corsOptions));
+
+// Log CORS configuration at startup for debuggability
+logger.info('CORS configured', {
+  origins: config.allowedOrigins,
+  methods: config.allowedMethods.join(','),
+});
 
 app.set('trust proxy', true);
 
@@ -94,6 +107,17 @@ app.use('/docs', swaggerUi.serve, (req, res, next) => {
   swaggerUi.setup(dynamicSpec)(req, res, next);
 });
 
+/**
+ * @swagger
+ * /openapi.json:
+ *   get:
+ *     tags: [Health]
+ *     summary: Raw OpenAPI specification
+ *     description: Returns the OpenAPI 3.0 JSON specification for this API
+ *     responses:
+ *       200:
+ *         description: OpenAPI specification JSON
+ */
 // Serve raw OpenAPI JSON
 app.get('/openapi.json', (req, res) => {
   const host = req.get('host');
